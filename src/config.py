@@ -6,11 +6,11 @@ BASE_DIR = Path("J:/Documents/FH/MA-Daten")
 # Metadata paths
 FMA_METADATA_DIR = BASE_DIR / "fma_metadata"
 RAW_TRACKS_CSV = FMA_METADATA_DIR / "tracks.csv"
-PROCESSED_TRACKS_CSV = "J:/Documents/FH/MA-Daten/tracks.csv"#BASE_DIR / "tracks.csv"
+PROCESSED_TRACKS_CSV = BASE_DIR / "tracks.csv"
 
 # Audio directories
 MP3_AUDIO_DIR = BASE_DIR / "fma_large"
-WAV_AUDIO_DIR = "J:/Documents/FH/MA-Daten/wav_large"#BASE_DIR / "wav_large"
+WAV_AUDIO_DIR = BASE_DIR / "wav_large"
 AUGMENTED_WAV_AUDIO_DIR = BASE_DIR / "wav_large_augmented"
 INVALID_AUDIO_DIR = BASE_DIR / "fma_large_invalid"
 

@@ -23,7 +23,7 @@ The experiments investigate how different feature representations and model arch
 - misclassification and dataset statistics
 - robustness analysis of selected models
 
-The dataset itself is not included in this repository due to its size and licensing conditions.
+The dataset itself is not included in this repository due to its size.
 
 ## Repository Structure
 
@@ -85,14 +85,16 @@ The dataset itself is not included in this repository due to its size and licens
 │       ├── 01_dataset_statistics.ipynb
 │       └── 02_misclassification_statistics.ipynb
 │
-├── results/
+├── results/ (generated)
 │   ├── metrics/
 │   ├── figures/
 │   └── confusion_matrices/
 │
-└── models/
+└── models/ (generated)
     └── saved_models/
 ```
+
+The `results/` and `models/` directories are generated automatically when running the notebooks and are not tracked by Git.
 
 ## Dataset
 
@@ -498,7 +500,6 @@ The implemented aggregation strategies include:
 
 - majority voting
 - mean probability aggregation
-- mean decision score aggregation where applicable
 
 Track-level evaluation is especially important for segmented input strategies because the final task is genre classification at track level.
 
@@ -567,5 +568,6 @@ Transfer learning workflows may require additional setup, such as downloading pr
 
 Jasmin Rotheneder
 
-Master's Thesis  
-Music Genre Classification using Spectral Analysis
+Master's Thesis
+Music genre classification based on Mel Frequency Cepstral Coefficients using machine learning algorithms  
+Musikgenreklassifikation auf Basis von Mel Frequency Cepstral Coefficients mittels Machine-Learning-Algorithmen
