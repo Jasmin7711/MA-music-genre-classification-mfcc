@@ -1,6 +1,6 @@
 # FMA Music Genre Classification with MFCC and Transfer Learning Models
 
-This repository contains the code and experimental workflow for a master's thesis on automatic music genre classification using spectral audio analysis. The project focuses on the Free Music Archive (FMA) dataset and compares classical machine learning, deep learning and transfer learning approaches.
+This repository contains the code and experimental workflow for my master's thesis on automatic music genre classification using spectral audio analysis. The project focuses on the Free Music Archive (FMA) dataset and compares classical machine learning, deep learning, and transfer learning approaches.
 
 The main feature representation is based on Mel-Frequency Cepstral Coefficients (MFCCs). In addition, transfer learning approaches based on Audio Spectrogram Transformers (AST) and Pretrained Audio Neural Networks (PANNs) are evaluated.
 
@@ -21,6 +21,7 @@ The experiments investigate how different feature representations and model arch
 - transfer learning using AST and PANNs
 - segment-level and track-level evaluation
 - misclassification and dataset statistics
+- robustness analysis of selected models
 
 The dataset itself is not included in this repository due to its size and licensing conditions.
 
@@ -48,8 +49,11 @@ The dataset itself is not included in this repository due to its size and licens
 │   │
 │   ├── 02_models/
 │   │   ├── 01_RandomForest.ipynb
+│   │   ├── 01_RandomForest_aug.ipynb
 │   │   ├── 02_LightGBM.ipynb
+│   │   ├── 02_LightGBM_aug.ipynb
 │   │   ├── 03_SVM.ipynb
+│   │   ├── 03_SVM_aug.ipynb
 │   │   ├── 04_ResNet.ipynb
 │   │   ├── 04_ResNet_aug.ipynb
 │   │   ├── 05_CNN_RNN.ipynb
@@ -129,13 +133,19 @@ Activate the environment on Windows:
 venv\Scripts\activate
 ```
 
+Activate the environment on Linux or macOS:
+
+```bash
+source venv/bin/activate
+```
+
 Install the required packages:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-The project uses packages such as NumPy, pandas, scikit-learn, librosa, LightGBM, TensorFlow, PyTorch, torchaudio and transformers. These dependencies are listed in `requirements.txt`.
+The project uses packages such as NumPy, pandas, scikit-learn, librosa, LightGBM, TensorFlow, PyTorch, torchaudio, and transformers. These dependencies are listed in `requirements.txt`.
 
 ## Configuration
 
@@ -260,7 +270,7 @@ This notebook creates MFCC matrix datasets from randomly sampled audio segments.
 
 For each selected track, a fixed number of random audio segments is sampled. Each segment is transformed into an MFCC matrix.
 
-These datasets are mainly used for deep learning models such as CNN, ResNet, CNN-RNN and LSTM models.
+These datasets are mainly used for deep learning models such as CNN, ResNet, CNN-RNN, and LSTM models.
 
 ### 5. Extract MFCC Mean Feature Datasets
 
@@ -284,49 +294,58 @@ The model notebooks are located in:
 notebooks/02_models/
 ```
 
-The models are grouped into classical machine learning models, deep learning models and transfer learning models.
+The models are grouped into classical machine learning models, deep learning models, and transfer learning models.
 
 ## Classical Machine Learning Models
+
+Classical machine learning models are trained on aggregated MFCC features. For each segment, the MFCC coefficients are summarized using mean and standard deviation values. The augmented variants use features extracted from augmented training audio files, while validation and test data remain unchanged.
 
 ### Random Forest
 
 ```text
 01_RandomForest.ipynb
+01_RandomForest_aug.ipynb
 ```
 
-This notebook trains and evaluates a Random Forest classifier using MFCC mean and standard deviation features.
+These notebooks train and evaluate Random Forest classifiers using MFCC mean and standard deviation features.
 
-The notebook includes:
+The notebooks include:
 
 - loading tabular MFCC feature datasets
-- feature preparation and optional scaling
+- feature preparation
 - Random Forest training
 - validation and test evaluation
 - segment-level evaluation
 - track-level aggregation
 - misclassification export
 
-A validation-based hyperparameter search is defined for selected Random Forest parameters.
+The augmented variant trains the model on augmented MFCC feature data. A validation-based hyperparameter search is defined for selected Random Forest parameters.
 
 ### LightGBM
 
 ```text
 02_LightGBM.ipynb
+02_LightGBM_aug.ipynb
 ```
 
-This notebook trains and evaluates a LightGBM classifier using MFCC mean and standard deviation features.
+These notebooks train and evaluate LightGBM classifiers using MFCC mean and standard deviation features.
 
 The model is trained on the training set and monitored on the validation set using early stopping. The final model is evaluated on the test set.
+
+The augmented variant uses augmented MFCC feature data for training, while validation and test sets remain unchanged.
 
 ### Support Vector Machine
 
 ```text
 03_SVM.ipynb
+03_SVM_aug.ipynb
 ```
 
-This notebook trains and evaluates a Support Vector Machine classifier using MFCC mean and standard deviation features.
+These notebooks train and evaluate Support Vector Machine classifiers using MFCC mean and standard deviation features.
 
 The SVM uses an RBF kernel and is evaluated on segment level and track level. If probability estimates are enabled, track-level predictions can be obtained using mean-probability aggregation.
+
+The augmented variant trains the SVM on augmented MFCC feature data, while validation and test data remain unchanged.
 
 ## Deep Learning Models
 
@@ -483,6 +502,14 @@ The implemented aggregation strategies include:
 
 Track-level evaluation is especially important for segmented input strategies because the final task is genre classification at track level.
 
+## Robustness Analysis
+
+A robustness analysis is conducted for selected models. The Random Forest and the RNN-based model are each executed ten times with different random states while keeping the train, validation, and test split fixed.
+
+For each run, accuracy and Macro-F1 are calculated. Afterwards, the mean and standard deviation are computed.
+
+This analysis evaluates the stability of the models with respect to random model and training processes. It does not evaluate robustness against different data splits or externally controlled noise conditions.
+
 ## Generated Files
 
 The following generated files are not included in the repository:
@@ -511,13 +538,13 @@ These files must be generated locally by running the notebooks.
 
 ## Reproducibility Note
 
-The repository contains the code used for preprocessing, feature extraction, model training and evaluation.
+The repository contains the code used for preprocessing, feature extraction, model training, and evaluation.
 
-Due to the size of the dataset and the computational cost of several experiments, generated datasets, trained models and large intermediate outputs are not included.
+Due to the size of the dataset and the computational cost of several experiments, generated datasets, trained models, and large intermediate outputs are not included.
 
 The notebooks document the experimental workflow and can be adapted to reproduce the experiments after configuring the local dataset paths in `src/config.py`.
 
-Minor deviations may occur due to hardware differences, library versions or non-deterministic behavior in some audio processing and deep learning operations.
+Minor deviations may occur due to hardware differences, library versions, or non-deterministic behavior in some audio processing and deep learning operations.
 
 ## Suggested Execution Order
 
